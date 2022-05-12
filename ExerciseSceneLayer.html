@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>SceneView - environment settings - 4.10</title>
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+  </style>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.16/esri/themes/dark/main.css">
+  <script src="https://js.arcgis.com/4.16/"></script>
+
+  <script>
+    require([
+      "esri/Map",
+      "esri/views/SceneView",
+      "esri/layers/SceneLayer",
+      "esri/widgets/Daylight"
+      
+    ], function(Map, SceneView, SceneLayer, Daylight) {
+
+      // Create the Map
+      var map = new Map({
+        basemap: "satellite",
+        ground: "world-elevation",
+        
+      });
+
+      // Create the SceneView
+      var view = new SceneView({
+        container: "viewDiv", 
+        map: map, 
+        //camera property for the SceneView
+        camera: {
+          position: [ 7.4480310018992295,46.94971909218679, 1500], //Position to view from
+          tilt: 45,
+          heading:270
+        }
+      });
+
+      //view.goTo({
+      //  center:[-74, 40.67],
+      //  heading:0
+      //});
+
+  
+      var sceneLayer = new SceneLayer({
+          url: "https://tiles.arcgis.com/tiles/oPre3pOfRfefL8y0/arcgis/rest/services/swissbuildings3D/SceneServer"
+          //portalItem: {id: ""}
+        
+      });
+      map.add(sceneLayer);
+     var ambiente = new Daylight({
+            view: view
+        });
+        view.ui.add(ambiente, "bottom-right");
+
+    });
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Adding a feature layer to the map</title>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.16/esri/css/main.css">
+  <script src="https://js.arcgis.com/4.16/"></script>
+
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+
+  <script>
+    require([
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/layers/FeatureLayer"
+      ],
+      function(
+        Map, MapView,FeatureLayer) {
+
+        var map = new Map({
+          basemap: "dark-gray"
+        });
+
+        var view = new MapView({
+          container: "viewDiv",
+          map: map,
+          zoom: 5,
+          center: [-100.2102486997977,37.682562553664944]
+        });
+
+        //Create a feature layer
+
+        var featureLayer = new FeatureLayer({
+          url: "https://services.arcgis.com/ue9rwulIoeLEI9bj/ArcGIS/rest/services/US_Counties/FeatureServer"
+          //portalItem: {id: ""}
+        });
+
+        var featureLayer2 = new FeatureLayer({
+          url: "https://services.arcgis.com/ue9rwulIoeLEI9bj/ArcGIS/rest/services/OregonClimateData/FeatureServer"
+          //portalItem: {id: ""}
+        });
+
+        var featureLayer3 = new FeatureLayer({
+          url: "https://services.arcgis.com/ue9rwulIoeLEI9bj/ArcGIS/rest/services/NAS_Zebra_Mussel_Data_2017_2020_selected/FeatureServer"
+          //portalItem: {id: ""}
+        });
+        
+        //Add a feature layer to the map
+
+        map.add(featureLayer);
+        map.add(featureLayer2);
+        map.add(featureLayer3);
+
+        //List the layers in the map
+        
+        //Iterate through all layer in the map
+        for (var a = 0, al = map.layers.length; a < al; a++) {
+            //Create a variable for the current layer selected from the map
+            var mapLayer = map.layers.getItemAt(a);
+            //Mostrar tipo y titulo del todos los layer
+            console.log("titulo: " + mapLayer.title + ", tipo: " + mapLayer.type);
+        }
+        var button = document.getElementById('testButton');
+        button.addEventListener('click', doSomething_Click);
+        function doSomething_Click() {
+          alert("Se eliminara el Layer 1")
+          map.remove(featureLayer);
+        }
+
+
+      });
+      
+
+
+  </script>
+</head>
+
+<body>
+  <input id="testButton" type="button" value="Eliminar primer mapa" onclick="doSomething_Click()">
+  <div id="viewDiv"></div>
+</body>
+
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Esri Chile</title>
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.16/esri/css/main.css">
+  <script src="https://js.arcgis.com/4.16/"></script>
+
+  <script>
+
+    require([
+      "esri/Map",
+      "esri/views/MapView"
+    ], function(Map, MapView) {
+
+
+      var map = new Map({
+
+        basemap: "satellite"
+      });
+
+
+      var view = new MapView({
+
+        container: "viewDiv",
+
+        map: map,
+
+        zoom: 19,
+
+        center: [ -70.56314915261679,-33.40741311894278]
+      });
+
+    });
+  </script>
+   <style>
+    body{
+        background-color: rgb(243, 243, 236);
+        margin: auto;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        font-family:Tahoma;
+    }
+    #viewDiv{
+        
+        margin: auto;
+        width: 1500px;
+        height: 800px;
+        padding-top: 5%;
+    }
+
+</style>
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+</body>
+</html>

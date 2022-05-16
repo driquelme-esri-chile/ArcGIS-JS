@@ -1,0 +1,231 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Demo</title>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.16/esri/themes/dark/main.css">
+  <script src="https://js.arcgis.com/4.16/"></script>
+
+  <style>
+    html,
+    body{
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+        display: flex;
+    }
+    #conter1{
+        width: 25%;
+        padding: 2%;
+    }
+    #conter2{
+        width: 75%;
+        padding: 2%;
+    }
+    #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+    }
+    img{
+        width: 100%;
+    }
+  </style>
+
+  <script>
+
+//Cargando librerias generales
+
+   require([
+        
+        "esri/Map",
+        "esri/WebScene",
+        "esri/views/SceneView",
+        "esri/layers/SceneLayer",
+
+        "esri/widgets/Search",
+        "esri/widgets/BasemapGallery",
+        "esri/widgets/LayerList",
+        "esri/widgets/DirectLineMeasurement3D",
+        "esri/widgets/AreaMeasurement3D",
+        "esri/widgets/Daylight",
+        "esri/widgets/LineOfSight",
+        "esri/widgets/Expand"
+      ],function( Map,
+                WebScene, 
+                SceneView, 
+                SceneLayer,
+
+                Search,
+                BasemapGallery,
+                LayerList, 
+                DirectLineMeasurement3D, 
+                AreaMeasurement3D, 
+                Daylight, 
+                LineOfSight, 
+                Expand){
+
+//Cargando mapa y su visualizacion
+
+        var map = new Map({
+            basemap: "satellite",
+            ground: "world-elevation",
+        
+        });
+//cargando el contenedor HTML, Mapa, posicion y zoom del mapa 
+        var view = new SceneView({
+            container: "viewDiv",
+            map: map,
+            camera: {
+                position: [ 7.4480310018992295,46.94971909218679, 700], //Position to view from
+                tilt: 75,
+                heading:270
+            }
+        });
+
+        
+//Setenemos widget de busqueda 
+
+        const searchWidget = new Search({
+            view: view
+        });
+
+//Seteamos el Layer que usaremos
+
+        var sceneLayer = new SceneLayer({
+          url: "https://tiles.arcgis.com/tiles/oPre3pOfRfefL8y0/arcgis/rest/services/swissbuildings3D/SceneServer"
+          //portalItem: {id: ""}
+        
+        });
+
+//comenzamos a setear los Widgets
+
+        var layerList = new LayerList({
+            view: view,
+        });
+        var medirlinea = new DirectLineMeasurement3D({
+            view: view,
+            container: document.createElement("div")     
+        });
+        var medirarea = new AreaMeasurement3D({
+            view: view,
+            container: document.createElement("div")
+        });
+        var ambiente = new Daylight({
+            view: view
+        });
+        var analisis = new LineOfSight({
+            view: view
+        });
+        var basemapGallery = new BasemapGallery({
+            view: view
+        });
+
+//Modificamos los Iconos de los Widgets
+
+        var medida = new Expand({
+            expandIconClass: "esri-icon-measure-line",
+            view: view,
+            content: medirlinea
+        });
+
+
+        var mapas2 = new Expand({
+            view: view,
+            content: basemapGallery
+        });
+        var area = new Expand({
+            expandIconClass: "esri-icon-measure-area",
+            view: view,
+            content: medirarea
+        });
+        var luzsol = new Expand({
+            expandIconClass: "esri-icon-environment-settings",
+            view: view,
+            content: ambiente
+        });
+        var lineavision = new Expand({
+            expandIconClass: "esri-icon-hollow-eye",
+            view: view,
+            content: analisis
+        });
+        var Leyenda = new Expand({
+            expandIconClass: "esri-icon-layer-list",
+            view: view,
+            content: layerList
+        });
+
+
+
+//Incluimos los Layers y widgets al mapa 
+        view.ui.add(searchWidget, "top-right");
+        view.ui.add(mapas2, "top-right");
+        view.ui.add(medida, "top-right");
+        view.ui.add(area, "top-right");
+        view.ui.add(luzsol, "top-right");
+        view.ui.add(lineavision, "top-right");
+        view.ui.add(Leyenda, "top-left");
+        map.add(sceneLayer);
+        
+
+// Adicional... boton que permite que el mapa viaje de un punto a otro 
+
+        var button = document.getElementById('testButton');
+        button.addEventListener('click', doSomething_Click);
+        function doSomething_Click() {
+          
+            view.goTo({
+                zoom: 17,
+                center:[-74.0329402, 4.7008247],
+                heading:0
+            });
+        }
+
+        var button = document.getElementById('testButton2');
+        button.addEventListener('click', doSomething_Click2);
+        function doSomething_Click2() {
+          
+            view.goTo({
+                zoom: 17,
+                center:[7.4480310018992295,46.94971909218679],
+                heading:0
+            });
+        }
+
+        var button = document.getElementById('testButton3');
+        button.addEventListener('click', doSomething_Click3);
+        function doSomething_Click3() {
+          
+            view.goTo({
+                zoom: 17,
+                center:[-70.65788988400693, -33.442008261193514],
+                heading:0
+            });
+        }
+      }); 
+  </script>
+</head>
+<body>
+    <div id="conter1">
+        <img src="https://www.innovyze.com/media/2077/esri-chile-logo_final.png?anchor=center&mode=crop&width=622&height=250&quality=80" alt="">
+        <div>
+            <h1>Viajar a Colombia</h1>
+            <input id="testButton" type="button" value="Aceptar" onclick="doSomething_Click()">
+        </div>
+        <div>
+            <h1>Viajar a Suisa</h1>
+            <input id="testButton2" type="button" value="Aceptar" onclick="doSomething_Click2()">
+        </div>
+        <div>
+            <h1>Viajar a Chile</h1>
+            <input id="testButton3" type="button" value="Aceptar" onclick="doSomething_Click3()">
+        </div>
+    </div>
+    <div id="conter2">
+        <div id="viewDiv"></div>
+    </div>
+</body>
+</html>
